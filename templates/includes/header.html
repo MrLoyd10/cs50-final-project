@@ -1,0 +1,93 @@
+<!-- Navigation Bar || Offcanvas-->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <!-- Nav container -->
+  <div class="container-lg">
+    <!-- Logo -->
+    <h1>
+      <a class="navbar-brand fs-3" id="quick_logo" href="#">Quick<span id="grade_logo">Grade</span></a>
+    </h1>
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler shadow-none border-0"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Offcanvas -->
+    <div
+      class="_sidebar offcanvas offcanvas-end"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+    >
+      <!-- Sidebar header -->
+      <div class="offcanvas-header text-white border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">QuickGrade</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white border-0 shadow-none"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <!-- Sidebar body -->
+      <div class="offcanvas-body d-flex flex-column flex-lg-row">
+        <ul
+          class="navbar-nav justify-content-start justify-content-lg-end align-items-center flex-grow-1 pe-lg-4" id="header_list"
+        >
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'dashboard' %}active{% endif %}" id="dashboard" aria-current="page" href="/">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'student_manager' %}active{% endif %}" id="student_manager" href="/student_manager">Student Manager</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'record' %}active{% endif %}" id="record" aria-current="page" href="/record">Record</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'result' %}active{% endif %}" id="result" aria-current="page" href="/result">Result</a>
+          </li>
+        </ul>
+
+        <!-- Account information -->
+        <div class="navbar-nav justify-content-center align-items-center">
+          <div class="dropdown-center d-flex flex-column">
+            <div
+              class="btn dropdown-toggle text-white d-flex justify-content-center align-items-center gap-2"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <h3 class="m-0" id="username">{{ current_user.name }}</h3>
+              {% if current_user.profile is none or current_user.profile == "" %}
+                <img
+                id="profile"
+                src="{{ url_for('static', filename='uploads/default_profile.jpg') }}"
+                alt="Profile photo"
+                /> 
+              {% else %}
+                <img
+                  id="profile"
+                  src="{{ url_for('static', filename=current_user.profile) }}"
+                  alt="Profile photo"
+                /> 
+              {% endif %}
+            </div>
+            <ul class="dropdown-menu dropdown-menu-dark" id="dropdown-logout">
+              <li>
+                <a class="dropdown-item" href="/log_out" style="font-size: small"
+                  >Log out</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

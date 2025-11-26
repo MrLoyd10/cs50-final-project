@@ -1,0 +1,177 @@
+{% extends "layout.html" %} 
+
+{% block title %} Dashboard {% endblock %} 
+
+{% block main %}
+  <div class="container-lg text-white mt-4">
+    <div class="row" style="min-width: 540px;">
+      <!-- Critiria -->
+      <div class="col-12 col-xl-6 my-2 pt-3 mb-4 mb-xl-2">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="pe-0 fs-6" id="mintGreen">Evaluation Criteria</h2>
+          <div class="form-check form-switch" id="criteria_switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label fs-6" for="flexSwitchCheckDefault"><i class="bi bi-pencil-square"></i>Edit</label>
+          </div>
+        </div>
+        <hr class="my-1">
+        <div class="d-flex flex-row m-3 justify-content-center align-items-center">
+          <form id="criteria" action="/criteria" method="post">
+            <div class="d-flex">
+              <div class="d-flex mb-2 me-4">
+                <p class="m-0 d-flex justify-content-end align-items-center me-2">Performance:</p>
+                <div class="input-group">
+                  <input type="number" class="form-control form-control-plaintext text-center" autocomplete="off"
+                  min="0" max="100" required value="{{ criteria[1] }}" name="performance">
+                  <span class="input-group-text" style="border-color: white;">%</span>
+                </div>
+              </div>
+  
+              <div class="d-flex mb-2">
+                <p class="m-0 d-flex justify-content-end align-items-center me-2">Seatwork:</p>
+                <div class="input-group">
+                  <input type="number" class="form-control form-control-plaintext text-center" autocomplete="off"
+                  min="0" max="100" required value="{{ criteria[3] }}" name="seatwork">
+                  <span class="input-group-text" style="border-color: white;">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <div class="d-flex mb-2 me-4">
+                <p class="m-0 d-flex justify-content-end align-items-center me-2">Recitation:</p>
+                <div class="input-group">
+                  <input type="number" class="form-control form-control-plaintext text-center" autocomplete="off"
+                  min="0" max="100" required value="{{ criteria[2] }}" name="recitation">
+                  <span class="input-group-text" style="border-color: white;">%</span>
+                </div>
+              </div>
+  
+              <div class="d-flex mb-2">
+                <p class="m-0 d-flex justify-content-end align-items-center me-2">Examination:</p>
+                <div class="input-group">
+                  <input type="number" class="form-control form-control-plaintext text-center" autocomplete="off"
+                  min="0" max="100" required value="{{ criteria[4] }}" name="examination">
+                  <span class="input-group-text" style="border-color: white;">%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REMOVE collapse if you want to show this div to your website -->
+            <div class="collapse" id="criteria_submit"> 
+              <div class="d-flex justify-content-center mt-2">
+                <button type="submit" class="btn btn-danger w-75">Confirm</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Top 3 -->
+      <div class="col-12 col-xl-6 d-flex flex-column my-2">
+        <h2 class="text-center fs-6 mb-3" id="mintGreen">Top 3 Students</h2>
+        <table class="table" style="background-color: black;">
+          <thead class="table-info">
+            <tr>
+              <th scope="col">Top</th>
+              <th scope="col">Name</th>
+              <th scope="col">Grade</th>
+            </tr>
+          </thead>
+          {% if topThree %}
+          <tbody class="table-dark">
+            {% for student in topThree %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ student[1] }}, {{ student[0] }}</td>
+              <td>{{ student[2] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% else %}
+          <tbody class="table-dark">
+            <tr>
+              <td colspan="3" class="text-center">No top students available.</td>
+            </tr>
+          </tbody>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-lg mt-4 text-white">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fs-6 m-0" id="mintGreen">Students</h2>
+      <form action="/" method="post" class="d-flex align-items-center gap-2 w-auto">
+        <select class="form-select form-select-sm" name="DashSubject" required>
+          <option {% if Dsubject == '' %}selected{% endif %} disabled value="">Subject</option>
+          <option {% if Dsubject == 'AP' %}selected{% endif %} value="AP">AP</option>
+          <option {% if Dsubject == 'Bible' %}selected{% endif %} value="Bible">Bible</option>
+          <option {% if Dsubject == 'Computer' %}selected{% endif %} value="Computer">Computer</option>
+          <option {% if Dsubject == 'English' %}selected{% endif %} value="English">English</option>
+          <option {% if Dsubject == 'Filipino' %}selected{% endif %} value="Filipino">Filipino</option>
+          <option {% if Dsubject == 'MAPEH' %}selected{% endif %} value="MAPEH">MAPEH</option>
+          <option {% if Dsubject == 'Math' %}selected{% endif %} value="Math">Math</option>
+          <option {% if Dsubject == 'Science' %}selected{% endif %} value="Science">Science</option>
+          <option {% if Dsubject == 'TLE' %}selected{% endif %} value="TLE">TLE</option>
+        </select>
+        <select class="form-select form-select-sm" name="DashGradeLvl" required>
+          <option {% if Dgradelvl == '' %}selected{% endif %} disabled value="">Grade lvl</option>
+          <option {% if Dgradelvl == 'Kinder' %}selected{% endif %} value="Kinder">Kinder</option>
+          <option {% if Dgradelvl == 'Grade 1' %}selected{% endif %} value="Grade 1">Grade 1</option>
+          <option {% if Dgradelvl == 'Grade 2' %}selected{% endif %} value="Grade 2">Grade 2</option>
+          <option {% if Dgradelvl == 'Grade 3' %}selected{% endif %} value="Grade 3">Grade 3</option>
+          <option {% if Dgradelvl == 'Grade 4' %}selected{% endif %} value="Grade 4">Grade 4</option>
+          <option {% if Dgradelvl == 'Grade 5' %}selected{% endif %} value="Grade 5">Grade 5</option>
+          <option {% if Dgradelvl == 'Grade 6' %}selected{% endif %} value="Grade 6">Grade 6</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm w-25">OK</button>
+      </form>
+    </div>
+    
+
+    <div class="table-responsive" id="style-4">
+      <table class="table table-dark table-striped table-sm">
+        <thead class="border-bottom " style="position: sticky; top: 0;">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Last</th>
+            <th scope="col">First</th>
+            <th scope="col" class="text-center">Initial Grade</th>
+            <th scope="col" class="text-center">Transmulated Grade</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          {% if finalGrade %}
+            {% for row in finalGrade %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td class="text-center">{{ row[2] }}</td>
+                <td class="text-center">{{ row[3] }}</td>
+              </tr>
+            {% endfor %}
+        
+          {% else %}
+            <tr class="table-warning">
+              <td colspan="5" class="text-center">No data available.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+        
+      </table>
+    </div>
+  </div>
+  
+
+
+{% endblock %}
+
+<!-- OWN JS -->
+{% block js %}
+  <script src="{{ url_for('static', filename='script/dashboard.js') }}"></script>
+{% endblock %}

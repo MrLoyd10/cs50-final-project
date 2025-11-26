@@ -1,0 +1,384 @@
+{% extends "layout.html" %}
+
+{% block title %} Record {% endblock %}
+
+{% block main %}
+
+<div class="container-lg my-4">
+  <div class="d-flex justify-content-end mb-2">
+    <form action="/result" method="post" class="d-flex align-items-center gap-2 mb-3">
+      <select class="form-select" name="resultSubject" required>
+        <option {% if subject == '' %}selected{% endif %} disabled value="">Subject</option>
+        <option {% if subject == 'AP' %}selected{% endif %} value="AP">AP</option>
+        <option {% if subject == 'Bible' %}selected{% endif %} value="Bible">Bible</option>
+        <option {% if subject == 'Computer' %}selected{% endif %} value="Computer">Computer</option>
+        <option {% if subject == 'English' %}selected{% endif %} value="English">English</option>
+        <option {% if subject == 'Filipino' %}selected{% endif %} value="Filipino">Filipino</option>
+        <option {% if subject == 'MAPEH' %}selected{% endif %} value="MAPEH">MAPEH</option>
+        <option {% if subject == 'Math' %}selected{% endif %} value="Math">Math</option>
+        <option {% if subject == 'Science' %}selected{% endif %} value="Science">Science</option>
+        <option {% if subject == 'TLE' %}selected{% endif %} value="TLE">TLE</option>
+      </select>
+      <select class="form-select" name="resultGradeLvl" required>
+        <option {% if gradelvl == '' %}selected{% endif %} disabled value="">Grade lvl</option>
+        <option {% if gradelvl == 'Kinder' %}selected{% endif %} value="Kinder">Kinder</option>
+        <option {% if gradelvl == 'Grade 1' %}selected{% endif %} value="Grade 1">Grade 1</option>
+        <option {% if gradelvl == 'Grade 2' %}selected{% endif %} value="Grade 2">Grade 2</option>
+        <option {% if gradelvl == 'Grade 3' %}selected{% endif %} value="Grade 3">Grade 3</option>
+        <option {% if gradelvl == 'Grade 4' %}selected{% endif %} value="Grade 4">Grade 4</option>
+        <option {% if gradelvl == 'Grade 5' %}selected{% endif %} value="Grade 5">Grade 5</option>
+        <option {% if gradelvl == 'Grade 6' %}selected{% endif %} value="Grade 6">Grade 6</option>
+      </select>
+      <button type="submit" class="btn btn-primary w-25">OK</button>
+    </form>
+  </div>
+
+  {% if Criteria_not_set %}
+  <div class="m-3 p-3 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3 text-center">
+    <p class="m-0">You forgot to set percentage of the evaluation criteria in the dashboard section.</p>
+  </div>
+
+  <!-- Check if its not empty -->
+  {% elif Perf_activities or Perf_student_grades or
+    Seat_activities or Seat_student_grades or
+    Reci_activities or Reci_student_grades or
+    Exam_activities or Exam_student_grades or
+    finalGrade %}
+
+
+  <!-- PERFORMANCE -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="result-header m-0" id="mintGreen">Performance</h2>
+    <button type="button" class="btn py-1 btn-outline-warning me-2 hide-btn" data-bs-toggle="collapse" data-bs-target="#perf-display" aria-expanded="true" aria-controls="perf-display">
+      <div class="d-flex align-content-center">
+          <p class="mb-0 me-2" style="font-size: 14px;">Hide</p>
+          <i class="bi bi-eye-slash-fill"></i>
+      </div>   
+    </button>
+  </div>
+  
+  {% if Perf_activities and Perf_student_grades %}
+  <div class="collapse show" id="perf-display">
+    <div class="table-responsive m-3">
+      <table class="table table-dark table-sm result_table">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student name</th>
+            {% for activity in Perf_activities %}
+              <th scope="col">{{ activity.title }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center">Raw total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for student_name, grades_data in Perf_student_grades.items() %}
+            {% set outer_loop = loop.index %}
+              <tr>
+                <td>{{ student_name }}</td>
+
+                {% for activity_grade in grades_data['grades'] %}
+                  <td class="col-1">
+                    <input
+                    data-grade-description="{{ activity_grade.grade_description }}"
+                    data-student-id = "{{ grades_data.student_id }}"
+                    data-grade-column = "{{ loop.index }}"
+                    data-criteria = "performance"
+                    data-row = "{{ outer_loop }}"
+                    type="number" class="form-control-plaintext text-white p-0" value="{{ activity_grade.grade }}">
+                  </td>
+                  
+                {% endfor %}
+                
+                <td id="total-performance-{{outer_loop}}" class="text-center">{{ grades_data.total_grade }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th scope="col" class="text-end pe-4">Highest score</th>
+            {% for activity in Perf_activities %}
+              <th scope="col" id="performance-highest-{{loop.index}}" class="performance-highest">{{ activity.highest }}</th>
+            {% endfor %}
+            <th scope="col"></th>
+          </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="collapse show" id="perf-display">
+    <div class="m-3 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+        <p class="m-0">No data available.</p>
+    </div>
+  </div>
+  {% endif %}
+  <hr class="border-3 border-white collapse" id="perf-display">
+
+  <!-- SEATWORK -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="result-header m-0" id="mintGreen">Seatwork</h2>
+    <button type="button" class="btn py-1 btn-outline-warning me-2 hide-btn" data-bs-toggle="collapse" data-bs-target="#seat-display" aria-expanded="true" aria-controls="seat-display">
+      <div class="d-flex align-content-center">
+          <p class="mb-0 me-2" style="font-size: 14px;">Hide</p>
+          <i class="bi bi-eye-slash-fill"></i>
+      </div>   
+    </button>
+  </div>
+  
+  {% if Seat_activities and Seat_student_grades %}
+  <div class="collapse show" id="seat-display">
+    <div class="table-responsive m-3">
+      <table class="table table-dark table-sm result_table">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student name</th>
+            {% for activity in Seat_activities %}
+              <th scope="col">{{ activity.title }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center">Raw total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for student_name, grades_data in Seat_student_grades.items() %}
+            {% set outer_loop = loop.index %}
+              <tr>
+                <td>{{ student_name }}</td>
+
+                {% for activity_grade in grades_data['grades'] %}
+                  <td class="col-1">
+                    <input
+                    data-grade-description="{{ activity_grade.grade_description }}"
+                    data-student-id = "{{ grades_data.student_id }}"
+                    data-grade-column = "{{ loop.index }}"
+                    data-criteria = "seatwork"
+                    data-row = "{{ outer_loop }}"
+                    type="number" class="form-control-plaintext text-white p-0" value="{{ activity_grade.grade }}">
+                  </td>
+                  
+                {% endfor %}
+                
+                <td id="total-seatwork-{{outer_loop}}" class="text-center">{{ grades_data.total_grade }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th scope="col" class="text-end pe-4">Highest score</th>
+            {% for activity in Seat_activities %}
+              <th scope="col" id="seatwork-highest-{{loop.index}}" class="seatwork-highest">{{ activity.highest }}</th>
+            {% endfor %}
+            <th scope="col"></th>
+          </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>  
+  {% else %}
+    <div class="collapse show" id="seat-display">
+      <div class="m-3 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+        <p class="m-0">No data available.</p>
+      </div>
+    </div>
+  {% endif %}
+  <hr class="border-3 border-white collapse" id="seat-display">
+
+
+  <!-- RECITATION -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="result-header m-0" id="mintGreen">Recitation</h2>
+    <button type="button" class="btn py-1 btn-outline-warning me-2 hide-btn" data-bs-toggle="collapse" data-bs-target="#reci-display" aria-expanded="true" aria-controls="reci-display">
+      <div class="d-flex align-content-center">
+          <p class="mb-0 me-2" style="font-size: 14px;">Hide</p>
+          <i class="bi bi-eye-slash-fill"></i>
+      </div>   
+    </button>
+  </div>
+
+  {% if Reci_activities and Reci_student_grades %}
+  <div class="collapse show" id="reci-display">
+    <div class="table-responsive m-3">
+      <table class="table table-dark table-sm result_table">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student name</th>
+            {% for activity in Reci_activities %}
+              <th scope="col">{{ activity.title }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center">Raw total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for student_name, grades_data in Reci_student_grades.items() %}
+            {% set outer_loop = loop.index %}
+              <tr>
+                <td>{{ student_name }}</td>
+
+                {% for activity_grade in grades_data['grades'] %}
+                  <td class="col-1">
+                    <input
+                    data-grade-description="{{ activity_grade.grade_description }}"
+                    data-student-id = "{{ grades_data.student_id }}"
+                    data-grade-column = "{{ loop.index }}"
+                    data-criteria = "recitation"
+                    data-row = "{{ outer_loop }}"
+                    type="number" class="form-control-plaintext text-white p-0" value="{{ activity_grade.grade }}">
+                  </td>
+                  
+                {% endfor %}
+                
+                <td id="total-recitation-{{outer_loop}}" class="text-center">{{ grades_data.total_grade }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th scope="col" class="text-end pe-4">Highest score</th>
+            {% for activity in Reci_activities %}
+              <th scope="col" id="recitation-highest-{{loop.index}}" class="recitation-highest">{{ activity.highest }}</th>
+            {% endfor %}
+            <th scope="col"></th>
+          </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+  {% else %}
+    <div class="collapse show" id="reci-display">
+      <div class="m-3 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+        <p class="m-0">No data available.</p>
+      </div>
+    </div>
+  {% endif %}
+  <hr class="border-3 border-white collapse" id="reci-display">
+
+
+  <!-- EXAMINATION -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="result-header m-0" id="mintGreen">Examination</h2>
+    <button type="button" class="btn py-1 btn-outline-warning me-2 hide-btn" data-bs-toggle="collapse" data-bs-target="#exam-display" aria-expanded="true" aria-controls="exam-display">
+      <div class="d-flex align-content-center">
+          <p class="mb-0 me-2" style="font-size: 14px;">Hide</p>
+          <i class="bi bi-eye-slash-fill"></i>
+      </div>   
+    </button>
+  </div>
+
+  {% if Exam_activities and Exam_student_grades %}
+  <div class="collapse show" id="exam-display">
+    <div class="table-responsive m-3 mb-5">
+      <table class="table table-dark table-sm result_table">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student name</th>
+            {% for activity in Exam_activities %}
+              <th scope="col">{{ activity.title }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center">Raw total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for student_name, grades_data in Exam_student_grades.items() %}
+            {% set outer_loop = loop.index %}
+              <tr>
+                <td>{{ student_name }}</td>
+
+                {% for activity_grade in grades_data['grades'] %}
+                  <td class="col-1">
+                    <input
+                    data-grade-description="{{ activity_grade.grade_description }}"
+                    data-student-id = "{{ grades_data.student_id }}"
+                    data-grade-column = "{{ loop.index }}"
+                    data-criteria = "examination"
+                    data-row = "{{ outer_loop }}"
+                    type="number" class="form-control-plaintext text-white p-0" value="{{ activity_grade.grade }}">
+                  </td>
+                  
+                {% endfor %}
+                
+                <td id="total-examination-{{outer_loop}}" class="text-center">{{ grades_data.total_grade }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th scope="col" class="text-end pe-4">Highest score</th>
+            {% for activity in Exam_activities %}
+              <th scope="col" id="examination-highest-{{loop.index}}" class="examination-highest">{{ activity.highest }}</th>
+            {% endfor %}
+            <th scope="col"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  {% else %}
+    <div class="collapse show" id="exam-display">
+      <div class="m-3 mb-5 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+        <p class="m-0">No data available.</p>
+      </div>
+    </div>
+  {% endif %}
+  <hr class="border-3 border-white collapse mb-5" id="exam-display">
+
+
+  <!--INITIAL AND TRASNMULATED GRADE  -->
+  <h2 class="text-center fs-3" style="color: yellow;">Initial and Transmulated Grade</h2>
+  <hr class="border-3 border-warning">
+  {% if finalGrade %}
+  <div class="table-responsive my-3 mx-5">
+      <table class="table table-dark table-sm" id="result_table">
+        <thead class="table-warning">
+          <tr>
+            <th scope="col">Student name</th>
+            <th scope="col" class="text-center">Initial Grade</th>
+            <th scope="col" class="text-center">Transmulated Grade</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in finalGrade %}
+            <tr>
+              <td>{{ row[0] }}, {{ row[1] }}</td>
+              <td class="text-center col-3" id="initial-{{ row[4] }}">{{ row[2] }}</td>
+              <td class="text-center col-3" id="transmulated-{{ row[4] }}">{{ row[3] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+  </div>
+  {% else %}
+    <div class="m-3 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+      <p class="m-0">No data available.</p>
+    </div>
+  {% endif %}
+
+
+
+  <!-- There is nothing to show -->
+  {% else %}
+  <div class="m-3 p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3 text-center">
+    <p class="m-0">No data available.</p>
+  </div>
+  {% endif %}
+</div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='script/result.js') }}"></script>
+{% endblock %}

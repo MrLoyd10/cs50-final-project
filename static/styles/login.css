@@ -1,0 +1,27 @@
+.logo {
+    height: 50px;
+}
+
+._nav {
+    border-bottom: 2px darkgray solid;
+}
+
+main {
+    height: 85vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+main h1 {
+    font-weight: 600;
+}
+
+#title {
+    color: #0174BE;
+    font-weight: 700;
+}
+
+body {
+    margin-bottom: 1em;
+    min-width: 576px;
+    height: 530px;
+}

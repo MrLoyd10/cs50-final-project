@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %} Record {% endblock %} 
+
+{% block main %}
+    <div class="container-lg mt-4">
+        <div class="row">
+            <!-- ADD RECORD -->
+            
+            <div class="col-12" id="addRecordDisplay">
+                <div class="text-white mb-5">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="fs-5 m-0">Record activities</h3>
+                        <button id="addRecord" type="button" class="btn py-1 btn-outline-warning me-2">
+                            <div class="d-flex align-content-center">
+                                <p class="mb-0 me-2" style="font-size: 14px;">Clear</p>
+                                <i class="bi bi-eye-slash-fill"></i>
+                            </div>   
+                        </button>
+                    </div>
+                    <hr>
+                    <form method="post" class="needs-validation" novalidate id="searchStudentForRecord">
+                        <div class="row mx-2 mb-3 column-gap-3">
+                            <div class="col px-0">
+                                <select class="form-select" name="recordCriteria" required>
+                                    <option selected disabled value="">Criteria</option>
+                                    <option value="Performance">Performance</option>
+                                    <option value="Seatwork">Seatwork</option>
+                                    <option value="Recitation">Recitation</option>
+                                    <option value="Examination">Examination</option>
+                                </select>
+                            </div>
+                            <div class="col px-0">
+                                <select class="form-select" name="recordSubject" required>
+                                    <option selected disabled value="">Subject</option>
+                                    <option value="AP">AP</option>
+                                    <option value="Bible">Bible</option>
+                                    <option value="Computer">Computer</option>
+                                    <option value="English">English</option>
+                                    <option value="Filipino">Filipino</option>
+                                    <option value="MAPEH">MAPEH</option>
+                                    <option value="Math">Math</option>
+                                    <option value="Science">Science</option>
+                                    <option value="TLE">TLE</option>
+                                </select>
+                            </div>
+                            <div class="col px-0">
+                                <select class="form-select" name="recordGradeLvl" required>
+                                    <option selected disabled value="">Grade lvl</option>
+                                    <option value="Kinder">Kinder</option>
+                                    <option value="Grade 1">Grade 1</option>
+                                    <option value="Grade 2">Grade 2</option>
+                                    <option value="Grade 3">Grade 3</option>
+                                    <option value="Grade 4">Grade 4</option>
+                                    <option value="Grade 5">Grade 5</option>
+                                    <option value="Grade 6">Grade 6</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mx-2 column-gap-3">
+                            <div class="col px-0">
+                                <input class="form-control" type="text" placeholder="Title/Name" name="ShowRecordTitle" autocomplete="off" disabled required>
+                                <input type="hidden" name="recordTitle" autocomplete="off" required>
+                            </div>
+                            <div class="col px-0">
+                                <input class="form-control" type="number" placeholder="Highest Score" name="recordHighScore" autocomplete="off" required>
+                            </div>
+                            <div class="col-3 px-0">
+                                <button type="submit" class="btn btn-primary w-100">OK</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <div class="table-responsive-md mx-4 d-none" id="student_record_table">
+                    <table class="table table-bordered table-sm mb-0" id="studentRecordGrade">
+                        <thead class="table-success">
+                          <tr>
+                            <th scope="col" class="text-nowrap">Last name</th>
+                            <th scope="col" class="text-nowrap">First name</th>
+                            <th scope="col" class="col-2 text-center">Grade</th>
+                          </tr>
+                        </thead>
+                        
+<!-- I use this just to prevent the password manager for popping when I click the input -->
+<input name="disable-pwd-mgr-1" type="password" id="disable-pwd-mgr-1" style="display: none;" value="disable-pwd-mgr-1" />
+                        
+                        <tbody class="table-dark table-group-divider" id="student_table">
+                            <!-- JS fill -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static', filename='script/record.js') }}"></script>
+{% endblock %}

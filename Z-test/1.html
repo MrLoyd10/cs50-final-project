@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Show/Hide Content with Bootstrap Switch</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="toggleSwitch">
+        <label class="custom-control-label" for="toggleSwitch">Toggle Content</label>
+      </div>
+    </div>
+    
+    <div class="collapse" id="collapseContent">
+      <div class="card card-body">
+        This content is hidden by default and will be shown when the switch is toggled.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $('#toggleSwitch').change(function() {
+      $('#collapseContent').collapse('toggle');
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+<div class="col-6">
+  <div class="mb-3">
+    <label for="fname" class="form-label">First name</label>
+    <input type="text" class="form-control" id="fname">
+  </div>
+  <div class="mb-3">
+    <label for="lname" class="form-label">Last name</label>
+    <input type="text" class="form-control" id="lname">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</div>
+
+<div class="col-6">
+  <div class="mb-3">
+    <label for="birthdate" class="form-label">Birthdate</label>
+    <input type="date" class="form-control" id="birthdate">
+  </div>
+  <div class="mb-3">
+    <label for="contact" class="form-label">Contact</label>
+    <input type="number" class="form-control" id="contact">
+  </div>
+</div>

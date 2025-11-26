@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- BOOTSTRAP CSS-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- Own CSS-->
+    <link rel="stylesheet" href="/static/styles/login.css" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>QuickGrade</title>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar mx-3 pb-2 _nav mt-2">
+      <img
+        class="logo img-fluid"
+        src="{{ url_for('static', filename='pictures/quickgrade-logo/png/logo-no-background.png') }}"
+        alt="Logo"
+      />
+      <div class="d-flex me-2">
+        <button type="button" class="btn px-3">About</button>
+      </div>
+    </nav>
+
+    <!-- Add this block in your HTML template to display flash messages -->
+    <div class="d-flex justify-content-center container-lg">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="messages w-100 mx-4 text-center m-3">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mb-0 p-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+    </div>
+
+    <!-- Main content -->
+    <main class="container-xxl mt-3">
+      <div class="row gap-3 gap-xl-1 mx-3 d-block d-lg-flex">
+        <div class="col d-flex flex-column justify-content-start lh-lg p-3">
+          <h1 class="h1 mb-4 text-center text-lg-start">
+            Welcome to <span id="title">QuickGrade</span> - Your Automatic
+            Grading System!
+          </h1>
+          <p class="lead d-none d-lg-inline">
+            Log in to access the powerful tools that make grading a breeze.
+            Streamline your workflow, save time, and provide accurate feedback
+            to your students effortlessly. Let's elevate education together!"
+          </p>
+          <hr class="border-2 d-lg-none" />
+        </div>
+        <div class="col">
+          <div class="container p-3">
+            <!-- Pills navs -->
+            <ul
+              class="nav nav-pills nav-justified mb-3"
+              id="ex1"
+              role="tablist"
+            >
+              <!-- Login button -->
+              <li class="nav-item" role="presentation">
+                <a
+                  class="nav-link active"
+                  id="tab-login"
+                  data-bs-toggle="pill"
+                  href="#pills-login"
+                  role="tab"
+                  aria-controls="pills-login"
+                  aria-selected="true"
+                  >Login</a
+                >
+              </li>
+              <!-- Register button -->
+              <li class="nav-item" role="presentation">
+                <a
+                  class="nav-link"
+                  id="tab-register register_btn"
+                  data-bs-toggle="pill"
+                  href="#pills-register"
+                  role="tab"
+                  aria-controls="pills-register"
+                  aria-selected="false"
+                  >Register</a
+                >
+              </li>
+            </ul>
+            <hr />
+
+            <!-- Pills content -->
+            <div class="tab-content">
+              <!-- Login contents -->
+              <div
+                class="tab-pane fade show active"
+                id="pills-login"
+                role="tabpanel"
+                aria-labelledby="tab-login"
+              >
+                <div class="mt-4 mx-2">
+                  <div
+                    class="p-3 mb-4 bg-lightblue text-dark border rounded"
+                    style="
+                      background-color: #d1ecf1;
+                      border-color: #bee5eb;
+                      font-size: 14px;
+                    "
+                  >
+                    <p class="mb-1 fw-medium">Test Account Information</p>
+                    <p class="mb-0">Username: admin</p>
+                    <p class="mb-2">Password: admin123</p>
+                    <p class="mb-0 fst-italic text-warning-emphasis">
+                      Take note: In the test account, there are only 5 kinder
+                      students, and their only data input is in the AP subject.
+                      So to test, you can browse the AP subject or add
+                      additional data to it.
+                    </p>
+                  </div>
+                </div>
+                <form class="mx-2" action="/login" method="post">
+                  <!-- User input -->
+                  <div class="form-outline mt-4 mb-3">
+                    <input
+                      type="text"
+                      id="loginName"
+                      class="form-control"
+                      autocomplete="off"
+                      name="username"
+                    />
+                    <label class="form-label" for="loginName">Username</label>
+                  </div>
+
+                  <!-- Password input -->
+                  <div class="form-outline mb-3">
+                    <input
+                      type="password"
+                      id="loginPassword"
+                      class="form-control"
+                      name="userpass"
+                    />
+                    <label class="form-label" for="loginPassword"
+                      >Password</label
+                    >
+                  </div>
+
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-primary btn-block mb-4">
+                    Sign in
+                  </button>
+                </form>
+              </div>
+
+              <!-- Register content -->
+              <div
+                class="tab-pane fade"
+                id="pills-register"
+                role="tabpanel"
+                aria-labelledby="tab-register"
+              >
+                <form
+                  class="mx-2"
+                  action="/register"
+                  method="post"
+                  enctype="multipart/form-data"
+                >
+                  <!-- Name input -->
+                  <div class="form-outline">
+                    <input
+                      type="text"
+                      id="registerName"
+                      class="form-control mb-2"
+                      placeholder="Name"
+                      autocomplete="off"
+                      pattern=".{4,15}"
+                      title="Name must be between 4 to 15 characters long"
+                      name="name"
+                    />
+                  </div>
+
+                  <!-- Profile Picture input -->
+                  <div class="mb-3">
+                    <label
+                      for="profilePicture"
+                      class="form-label mb-0 text-black-50"
+                      >Profile Picture</label
+                    >
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="profilePicture"
+                      accept="image/*"
+                      name="profile"
+                    />
+                  </div>
+                  <hr />
+
+                  <!-- Username input -->
+                  <div class="form-outline mb-2">
+                    <input
+                      type="text"
+                      id="registerUsername"
+                      class="form-control"
+                      placeholder="Username"
+                      autocomplete="off"
+                      pattern="^\S{4,}$"
+                      title="Username must be at least 4 characters long and contain no spaces"
+                      name="username"
+                    />
+                  </div>
+
+                  <!-- Password input -->
+                  <div class="form-outline mb-2">
+                    <input
+                      type="password"
+                      id="registerPassword"
+                      class="form-control"
+                      placeholder="Password"
+                      pattern="^\S{8,}$"
+                      title="Password must be at least 8 characters long and contain no spaces"
+                      name="password"
+                    />
+                  </div>
+
+                  <!-- Repeat Password input -->
+                  <div class="form-outline mb-2">
+                    <input
+                      type="password"
+                      id="registerRepeatPassword"
+                      class="form-control"
+                      placeholder="Confirm password"
+                      name="confirm_password"
+                    />
+                  </div>
+
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-primary btn-block mb-3">
+                    Sign in
+                  </button>
+                </form>
+              </div>
+            </div>
+            <!-- Pills content -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- BOOTSTRAP JAVASCRIPT-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{ url_for('static', filename='script/header.js' )}}"></script>
+  </body>
+</html>
